@@ -1,0 +1,8 @@
+[
+    {"spending_Date":"2023-05-01","spending_Category":"교통비","Details":"4월 교통비 후불결제","Paid":"45,100원"},
+    {"spending_Date":"2023-05-02","spending_Category":"식비","Details":"로제마라샹궈","Paid":"18,000원"},
+    {"spending_Date":"2023-05-02","spending_Category":"여가비","Details":"PC방","Paid":"3,000원"},
+    {"spending_Date":"2023-05-03","spending_Category":"식비","Details":"박가네부대찌개","Paid":"15,000원"},
+    {"spending_Date":"2023-05-03","spending_Category":"생활비","Details":"4월 전기세","Paid":"8,610원"},
+    {"spending_Date":"test","spending_Category":"test","Details":"test","Paid":"test"}
+]
