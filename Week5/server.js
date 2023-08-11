@@ -4,7 +4,8 @@ const bodyParser = require('body-parser');
 const app = express();
 const fs = require('fs');
 
-const dataFile = "todolist.txt";
+const maria = require('./database/connect/maria');
+maria.connect();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -12,22 +13,25 @@ app.use(cors());
 
 app.route('/api/data')
   .get((req, res) => {
-    fs.readFile(dataFile, 'utf8', (err, data) => {
-      if (err) {
-        console.error('Error reading file:', err);
-        return res.status(500).json({ error: 'Error reading file' });
+    maria.query('SELECT * FROM todolist', function(err, rows, fields) {
+      if (!err) {
+        res.send(rows);
+      } else {
+        console.log("error : " + err);
+        res.send(err);
       }
-  
-      const dataList = data.trim().split('\n');
-      res.json(dataList);
-      return;
     });
   })
 
   .post((req, res) => {
-    console.log(req.body);
-    res.end();
-    return;
+    maria.query(`INSERT INTO todolist(Content) VALUES ("${req.body.content}")`, function(err, rows, field) {
+      if (!err) { 
+        res.send(rows);
+      } else {
+        console.log("error : " + err);
+        res.send(err);
+      }
+    })
   })
 
   .delete((req, res) => {
