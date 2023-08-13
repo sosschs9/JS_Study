@@ -24,18 +24,46 @@ app.route('/api/data')
   })
 
   .post((req, res) => {
-    maria.query(`INSERT INTO todolist(Content) VALUES ("${req.body.content}")`, function(err, rows, field) {
+    maria.query(`INSERT INTO todolist(Content) VALUES ("${req.body.content}")`, function(err, rows) {
       if (!err) { 
-        res.send(rows);
+        res.status(201).json({
+          message: "New item added Successfully",
+          itemId: rows.insertId
+        });
       } else {
         console.log("error : " + err);
+        res.status(400).json({
+          error: "Error occurred while adding the item"
+        });
+      }
+    })
+  })
+
+  .put((req, res) => {
+    const checked = req.body.checked;
+    const id = req.body.id;
+
+    maria.query(`UPDATE todolist SET complete=${checked} WHERE Id=${id}`, function(err, rows) {
+      if (!err) {
+        res.send(rows);
+      } else {
+        console.log("Error : " + err);
         res.send(err);
       }
     })
   })
 
   .delete((req, res) => {
+    const id = req.body.id;
 
+    maria.query(`DELETE FROM todolist WHERE Id=${id}`, function(err, rows) {
+      if (!err) {
+        res.send(rows);
+      } else {
+        console.log("Error : " + err);
+        res.send(err);
+      }
+    })
   });
 
 

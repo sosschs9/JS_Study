@@ -23,19 +23,49 @@ function App() {
   const handleChange = e => {
     setReqData(e.target.value)
   }
-  const handleClick = (e) => {
+  const handleClick = async(e) => {
     e.preventDefault();
     try {
-    const res = axios.post('http://localhost:8080/api/data', {
+    const res = await axios.post('http://localhost:8080/api/data', {
       content: reqData
     });
-    } catch(err) {
-      console.log("Error : " + err);
-    }
+    console.log(res);
     // DB 업로드 이후 리스트 다시 불러오기
     fetchData();
     // input value 비우기
     setReqData("");
+    alert("등록이 완료되었습니다.");
+    } catch(err) {
+      console.log(err);
+    }
+  }
+
+  const handleCheck = async(e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.put('http://localhost:8080/api/data', {
+        id : e.target.id,
+        checked : e.target.checked
+      });
+      fetchData();
+    } catch(err) {
+      console.log(err);
+    }
+  }
+
+  const handleDelete = async(e) => {
+    e.preventDefault();
+    console.log(e.target.id);
+    try{
+      const res = await axios.delete('http://localhost:8080/api/data', {
+        data : {
+          id : e.target.id
+        } 
+      });
+      fetchData();
+    } catch(err) {
+      console.log(err);
+    }
   }
 
   return (
@@ -43,8 +73,15 @@ function App() {
       <h1>헤공의 투두리스트</h1>
       <ul>
         {resData.map(item => (
-          // // 각 항목을 리스트 아이템으로 만듭니다.
-          <li key={item.Id}>{item.Content}</li>
+          // 각 항목을 리스트 아이템으로 만듭니다.
+          <li key={item.Id}>{item.Content}
+          <input 
+          type="checkbox"
+          checked={item.Complete}
+          id={item.Id}
+          onChange={handleCheck}></input>
+          <button id={item.Id} onClick={handleDelete}>삭제</button>
+          </li>
         ))}
       </ul>
 
